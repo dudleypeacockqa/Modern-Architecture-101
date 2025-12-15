@@ -10,6 +10,9 @@ This repository is inspired by the "Modern Architecture 101" presentation by Jer
 
 ## How to Use This Repository
 
+**For Windows users, please see the [WINDOWS-SETUP-GUIDE.md](WINDOWS-SETUP-GUIDE.md) for PowerShell-specific instructions.**
+
+
 This repository is structured to guide you through the architectural decision-making process, from high-level principles to specific technology choices. It is intended to be used as:
 
 1.  **A Reference Guide:** For understanding modern architectural patterns and principles.
