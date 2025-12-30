@@ -10,13 +10,6 @@ This repository incorporates **proven lessons learned from FloCommand** and is c
 
 ## Quick Start
 
-### Greenfield Project (Unix/macOS)
-```bash
-git clone https://github.com/dudleypeacockqa/Modern-Architecture-101.git
-cd Modern-Architecture-101
-./scripts/init-project.sh my-new-project greenfield
-```
-
 ### Greenfield Project (Windows PowerShell)
 ```powershell
 git clone https://github.com/dudleypeacockqa/Modern-Architecture-101.git
@@ -25,15 +18,53 @@ cd Modern-Architecture-101
 ```
 
 ### Brownfield Project (Add to Existing)
-```bash
+```powershell
 # From your existing project root
-./path/to/Modern-Architecture-101/scripts/init-project.sh . brownfield
+.\path\to\Modern-Architecture-101\scripts\init-project.ps1 -ProjectName "." -ProjectType "brownfield"
+```
+
+### Using Git Bash / WSL
+```bash
+git clone https://github.com/dudleypeacockqa/Modern-Architecture-101.git
+cd Modern-Architecture-101
+./scripts/init-project.sh my-new-project greenfield
+```
+
+## What Gets Created
+
+The initialization scripts create:
+
+```
+my-new-project/
+├── .claude/
+│   └── CLAUDE.md              # Claude Code BMAD+TDD rules
+├── docs/
+│   ├── NORTH_STAR.md          # Single source of truth index
+│   ├── 00_System_Vision_and_Strategy.md
+│   ├── 01_strategy/
+│   │   ├── prd/
+│   │   │   └── index.md       # PRD entry point
+│   │   └── BMAD_SINGLE_SOURCE_OF_TRUTH.md
+│   └── 02_architecture/
+│       └── architecture.md
+├── bmad/
+│   └── intents/
+│       └── intent-01-example.md
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+├── .env.example
+└── pytest.ini
 ```
 
 ## Repository Structure
 
 ### Core Methodology
 - **/.bible** - BMAD integration and methodology bridge documents
+  - `01-bmad-integration.md` - How BMAD and Architecture work together
+  - `02-flocommand-lessons-learned.md` - Proven patterns from production
+  - `03-standard-integrations.md` - Standard tech stack (Clerk, Linear, PostgreSQL, Render)
 - **/core-principles** - Foundational architectural beliefs
 - **/architecture-patterns** - Common architectural patterns analysis
 - **/decision-frameworks** - ADR templates and decision tools
@@ -46,14 +77,15 @@ cd Modern-Architecture-101
 ### Tool Configurations
 - **/tool-configs** - Standardized AI assistant and IDE configurations
   - `CLAUDE.md` - Claude Code system rules (BMAD + TDD)
+  - `claude-code-capabilities.md` - Claude Code skills and MCP servers
   - `cursor-settings.json` - Cursor IDE integration settings
   - `linear-integration.md` - Linear fault management integration
 
-### Templates & Examples
+### Templates
+- **/templates** - Project templates
+  - `NORTH_STAR.md` - Single source of truth template
 - **/prd-templates** - Standardized PRD templates
-- **/technology-stacks** - Language and framework guidance
-- **/examples** - Real-world application examples
-- **/scripts** - Project initialization scripts
+- **/scripts** - Project initialization scripts (Windows PowerShell + Bash)
 
 ## Key Integrations
 
@@ -61,8 +93,17 @@ cd Modern-Architecture-101
 |-------------|---------|---------------|
 | **Clerk** | Authentication | [Standard Setup](.bible/03-standard-integrations.md#authentication-clerk) |
 | **Linear** | Issue Tracking & Faults | [linear-integration-module](https://github.com/dudleypeacockqa/linear-integration-module) |
-| **Supabase** | Database (PostgreSQL) | [Standard Setup](.bible/03-standard-integrations.md#database-supabasepostgresql) |
+| **PostgreSQL** | Database | [Standard Setup](.bible/03-standard-integrations.md#database-postgresql-direct-or-via-render) |
 | **Render** | Deployment | [Standard Setup](.bible/03-standard-integrations.md#deployment-render) |
+
+## Claude Code Capabilities
+
+See [claude-code-capabilities.md](tool-configs/claude-code-capabilities.md) for:
+
+- Core file/shell/web operations
+- Required MCP server configurations
+- Skill definitions (Code Analysis, TDD Implementation, Git Operations)
+- Capability restrictions and best practices
 
 ## BMAD + TDD Workflow
 
@@ -76,6 +117,16 @@ Every task follows this workflow:
 
 See [CLAUDE.md](tool-configs/CLAUDE.md) for complete rules.
 
+## North Star Document
+
+Every project should have a `docs/NORTH_STAR.md` file that serves as the single source of truth for finding authoritative documents. See [templates/NORTH_STAR.md](templates/NORTH_STAR.md) for the template.
+
+The North Star defines:
+- Document status legend (USE THIS, SUPERSEDED, ARCHIVED, INDEX, SUPPLEMENT)
+- Quick reference table for all core documents
+- Usage guidelines for different roles
+- Maintenance procedures
+
 ## Lessons Learned
 
 The [FloCommand Lessons Learned](.bible/02-flocommand-lessons-learned.md) document captures proven patterns:
@@ -88,7 +139,7 @@ The [FloCommand Lessons Learned](.bible/02-flocommand-lessons-learned.md) docume
 
 ## For Windows Users
 
-See [WINDOWS-SETUP-GUIDE.md](WINDOWS-SETUP-GUIDE.md) for PowerShell-specific instructions.
+All development is standardized on Windows with PowerShell. See [WINDOWS-SETUP-GUIDE.md](WINDOWS-SETUP-GUIDE.md) for setup instructions.
 
 ## Contribution
 
