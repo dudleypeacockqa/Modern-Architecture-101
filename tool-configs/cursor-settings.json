@@ -1,0 +1,46 @@
+{
+  "$schema": "https://cursor.sh/schema/settings",
+  "description": "Standardized Cursor IDE settings for BMAD+TDD projects",
+  "ai": {
+    "model": "claude-sonnet-4-20250514",
+    "contextFiles": [
+      ".claude/CLAUDE.md",
+      "docs/prd.md",
+      "docs/architecture.md",
+      "bmad/intents/*.md"
+    ]
+  },
+  "rules": [
+    "Follow BMAD methodology - always reference intents and PRD before implementing",
+    "Follow TDD - design tests before writing implementation code",
+    "Never claim success without test verification",
+    "Use neutral, precise language - avoid enthusiasm",
+    "Verify file paths exist before referencing them",
+    "Minimal scope creep - implement only what is requested"
+  ],
+  "integrations": {
+    "linear": {
+      "enabled": true,
+      "faultReporting": true,
+      "webhookEndpoint": "/api/webhooks/linear"
+    },
+    "clerk": {
+      "enabled": true,
+      "authMiddleware": true
+    }
+  },
+  "testing": {
+    "python": {
+      "framework": "pytest",
+      "command": "pytest -q"
+    },
+    "javascript": {
+      "framework": "vitest",
+      "command": "npm test"
+    },
+    "e2e": {
+      "framework": "cypress",
+      "command": "npx cypress run"
+    }
+  }
+}
