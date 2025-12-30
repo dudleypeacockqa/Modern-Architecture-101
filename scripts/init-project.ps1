@@ -20,8 +20,10 @@ if ($ProjectType -eq "greenfield") {
     
     # Create directory structure
     $directories = @(
+        "$ProjectName/docs/00_overview",
         "$ProjectName/docs/01_strategy/prd",
         "$ProjectName/docs/02_architecture",
+        "$ProjectName/docs/04_project_management/stories",
         "$ProjectName/bmad/intents",
         "$ProjectName/src",
         "$ProjectName/tests/unit",
@@ -37,20 +39,152 @@ if ($ProjectType -eq "greenfield") {
     # Copy CLAUDE.md template
     Copy-Item "tool-configs/CLAUDE.md" "$ProjectName/.claude/CLAUDE.md"
     
-    # Create PRD template
+    # Copy North Star template
+    Copy-Item "templates/NORTH_STAR.md" "$ProjectName/docs/NORTH_STAR.md"
+    
+    # Create Vision template
+    $visionContent = @"
+# System Vision and Strategy
+
+**Last Updated**: $(Get-Date -Format "yyyy-MM-dd")
+**Version**: 1.0
+**Status**: Draft
+
+## Executive Summary
+
+[Brief overview of the system and its purpose]
+
+## Business Goals
+
+1. [Goal 1]
+2. [Goal 2]
+3. [Goal 3]
+
+## Target Users
+
+- **Primary**: [Primary user description]
+- **Secondary**: [Secondary user description]
+
+## Core Features
+
+1. [Feature 1]
+2. [Feature 2]
+3. [Feature 3]
+
+## Success Metrics
+
+| Metric | Target | Current |
+|--------|--------|---------|
+| [Metric 1] | [Target] | - |
+| [Metric 2] | [Target] | - |
+
+## Technical Architecture
+
+See `docs/02_architecture/architecture.md` for detailed architecture.
+
+## Implementation Phases
+
+### Phase 1: Foundation
+- [Milestone 1]
+- [Milestone 2]
+
+### Phase 2: Core Features
+- [Milestone 3]
+- [Milestone 4]
+
+### Phase 3: Enhancement
+- [Milestone 5]
+- [Milestone 6]
+"@
+    Set-Content -Path "$ProjectName/docs/00_System_Vision_and_Strategy.md" -Value $visionContent
+    
+    # Create PRD index
     $prdContent = @"
 # Product Requirements Document
 
+**Version**: 1.0
+**Last Updated**: $(Get-Date -Format "yyyy-MM-dd")
+
 ## Overview
+
 [Project overview here]
 
 ## Goals
+
 [Project goals here]
 
-## Requirements
-[Requirements here]
+## Functional Requirements
+
+| ID | Requirement | Priority | Status |
+|----|-------------|----------|--------|
+| FR-001 | [Requirement] | Must | Pending |
+
+## Non-Functional Requirements
+
+| ID | Requirement | Priority | Status |
+|----|-------------|----------|--------|
+| NFR-001 | [Requirement] | Must | Pending |
+
+## Epics
+
+- [Epic 1](./epic-1.md)
+- [Epic 2](./epic-2.md)
 "@
-    Set-Content -Path "$ProjectName/docs/prd.md" -Value $prdContent
+    Set-Content -Path "$ProjectName/docs/01_strategy/prd/index.md" -Value $prdContent
+    
+    # Create BMAD Single Source of Truth
+    $bmadContent = @"
+# BMAD Single Source of Truth
+
+**Purpose**: Define the authoritative document hierarchy for BMAD agents.
+
+## Document Hierarchy
+
+1. **PRD**: `docs/01_strategy/prd/index.md`
+2. **Architecture**: `docs/02_architecture/architecture.md`
+3. **Epics**: `docs/01_strategy/prd/epic-*.md`
+4. **Stories**: `docs/04_project_management/stories/`
+
+## Rules
+
+- Always use PRIMARY documents
+- IGNORE archived documents
+- Use SUPPLEMENT documents for context only
+"@
+    Set-Content -Path "$ProjectName/docs/01_strategy/BMAD_SINGLE_SOURCE_OF_TRUTH.md" -Value $bmadContent
+    
+    # Create architecture template
+    $archContent = @"
+# Architecture
+
+**Version**: 1.0
+**Last Updated**: $(Get-Date -Format "yyyy-MM-dd")
+
+## Overview
+
+[Architecture overview]
+
+## Technology Stack
+
+- **Frontend**: [Framework]
+- **Backend**: [Framework]
+- **Database**: PostgreSQL
+- **Authentication**: Clerk
+- **Deployment**: Render
+
+## System Components
+
+[Component diagram or description]
+
+## Data Flow
+
+[Data flow description]
+
+## Security
+
+[Security considerations]
+"@
+    Set-Content -Path "$ProjectName/docs/02_architecture/architecture.md" -Value $archContent
     
     # Create intent template
     $intentContent = @"
@@ -80,7 +214,7 @@ Then [result]
 APP_NAME=YourAppName
 ENVIRONMENT=development
 
-# Database
+# Database (PostgreSQL)
 DATABASE_URL=postgresql://user:pass@localhost:5432/db
 
 # Authentication (Clerk)
@@ -108,8 +242,10 @@ addopts = -v --tb=short
     
     # Add missing directories
     $directories = @(
+        "docs/00_overview",
         "docs/01_strategy/prd",
         "docs/02_architecture",
+        "docs/04_project_management/stories",
         "bmad/intents",
         ".claude",
         "tests/unit",
@@ -130,6 +266,12 @@ addopts = -v --tb=short
         Write-Host "Added .claude/CLAUDE.md" -ForegroundColor Green
     }
     
+    # Copy North Star if not exists
+    if (-not (Test-Path "docs/NORTH_STAR.md")) {
+        Copy-Item "templates/NORTH_STAR.md" "docs/NORTH_STAR.md"
+        Write-Host "Added docs/NORTH_STAR.md" -ForegroundColor Green
+    }
+    
     # Create env example if not exists
     if (-not (Test-Path ".env.example")) {
         Set-Content -Path ".env.example" -Value "# Add your environment variables here"
@@ -142,7 +284,9 @@ Write-Host "Project initialized successfully!" -ForegroundColor Green
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Cyan
 Write-Host "1. Review and customize .claude/CLAUDE.md"
-Write-Host "2. Update docs/prd.md with your requirements"
-Write-Host "3. Create intents in bmad/intents/"
-Write-Host "4. Copy .env.example to .env and configure"
-Write-Host "5. Start with TDD - write tests first!"
+Write-Host "2. Update docs/NORTH_STAR.md with your document locations"
+Write-Host "3. Update docs/00_System_Vision_and_Strategy.md with your vision"
+Write-Host "4. Update docs/01_strategy/prd/index.md with your requirements"
+Write-Host "5. Create intents in bmad/intents/"
+Write-Host "6. Copy .env.example to .env and configure"
+Write-Host "7. Start with TDD - write tests first!"

@@ -63,16 +63,25 @@ LINEAR_WEBHOOK_SECRET=lin_wh_xxx
 - Webhook event processing
 - Error deduplication
 
-## Database: Supabase/PostgreSQL
+## Database: PostgreSQL (Direct or via Render)
 
 **Standard Configuration:**
 
 ```bash
 # Environment Variables
 DATABASE_URL=postgresql://user:pass@host:5432/db
-SUPABASE_URL=https://xxx.supabase.co
-SUPABASE_ANON_KEY=xxx
-SUPABASE_SERVICE_ROLE_KEY=xxx
+```
+
+### Connection Pattern (Python)
+
+```python
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 ```
 
 ### Row Level Security (RLS)
@@ -140,12 +149,13 @@ Model Context Protocol servers for enhanced AI capabilities:
 - **GitHub MCP** - Repository operations
 - **Playwright MCP** - Browser automation
 - **Context7 MCP** - Documentation lookup
+- **Clerk MCP** - User management
 
-### Configuration Location
+### Configuration Location (Windows)
 
 ```
-~/.claude/claude_desktop_config.json  # Claude Desktop
-~/.cursor/mcp.json                     # Cursor IDE
+%USERPROFILE%\.claude\claude_desktop_config.json  # Claude Desktop
+%USERPROFILE%\.cursor\mcp.json                     # Cursor IDE
 ```
 
 ## CI/CD: GitHub Actions
@@ -171,4 +181,28 @@ jobs:
         run: pytest --cov=src
       - name: Upload coverage
         uses: codecov/codecov-action@v4
+```
+
+## Local Development: Windows
+
+All development is standardized on Windows with PowerShell.
+
+### PowerShell Commands
+
+```powershell
+# Activate virtual environment
+.\venv\Scripts\Activate.ps1
+
+# Run tests
+pytest -v
+
+# Start development server
+uvicorn backend.app:app --reload
+```
+
+### Git Configuration
+
+```powershell
+# Set line endings for Windows
+git config --global core.autocrlf true
 ```
